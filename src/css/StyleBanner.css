@@ -1,0 +1,4 @@
+.carousel .thumb,
+.carousel .carousel-status {
+  display: none !important;
+}
