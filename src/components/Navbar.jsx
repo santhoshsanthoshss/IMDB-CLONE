@@ -3,17 +3,14 @@ import Logo from "../images/logo.jpg";
 import { NavLink } from "react-router-dom";
 const Navbar = () => {
   return (
-    <div className=" py-4 border flex items-center flex-wrap gap-4  md:gap-5">
-      <img src={Logo} alt="" className="w-24  object-cover" />
-      <NavLink
-        to="/"
-        className="font-bold text-2xl  text-blue-400 object-cover"
-      >
+    <div className=" border flex items-center space-x-8 pl-12 py-4">
+      <img src={Logo} alt="" className="w-[50px] md:w-[90px] object-cover" />
+      <NavLink to="/" className="font-bold text-xl md:text-2xl text-blue-400">
         Movies
       </NavLink>
       <NavLink
         to="/fav"
-        className="font-bold text-2xl  text-blue-400  object-cover"
+        className="font-bold text-xl md:text-2xl text-blue-400"
       >
         Favourites
       </NavLink>

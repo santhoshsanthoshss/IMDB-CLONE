@@ -57,7 +57,7 @@ const Movies = () => {
     setfavourites(filtereditem);
   };
   return (
-    <div className="relative bottom-48 md:mt-72">
+    <div className="relative bottom-28  md:mt-52 ">
       <div className="mb-10 font-bold text-2xl md:text-3xl text-center">
         Trending Movie
       </div>
