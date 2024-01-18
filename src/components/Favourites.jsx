@@ -102,6 +102,11 @@ const Favourites = () => {
   const [genre, setGenres] = useState([]);
   const [movies, setMovies] = useState(samplemovies);
   const [search, setsearch] = useState("");
+  const [currentGen, setcurrentGen] = useState("All Genres");
+  const [currRatingOrder, setcurrRatingOrder] = useState(0);
+  const [currpopularOrder, setcurrpopularOrder] = useState(0);
+  const [noofElem, setnoofElem] = useState(2);
+  const [currpage, setcurrpage] = useState(1);
 
   //all geners
   useEffect(() => {
@@ -120,6 +125,12 @@ const Favourites = () => {
     setMovies(filterdel);
   };
 
+  // button
+
+  const oncurrentGen = (genre) => {
+    setcurrentGen(genre);
+  };
+
   // searching
   const searchedItem =
     search === ""
@@ -130,14 +141,78 @@ const Favourites = () => {
           return Moviesearch.toLowerCase().includes(searchField);
         });
 
+  // filtering the all genres
+  const filteritems =
+    currentGen === "All Genres"
+      ? searchedItem
+      : searchedItem.filter((searchedMovie) => {
+          return genreids[searchedMovie.genre_ids[0]] === currentGen;
+        });
+
+  // sorting with rating
+
+  if (currRatingOrder !== 0) {
+    if (currRatingOrder === 1) {
+      filteritems.sort((movieA, movieB) => {
+        return movieA.vote_average - movieB.vote_average;
+      });
+    } else if (currRatingOrder === -1) {
+      filteritems.sort((movieA, movieB) => {
+        return movieB.vote_average - movieA.vote_average;
+      });
+    }
+  }
+
+  // sorting with popularity
+  if (currpopularOrder !== 0) {
+    if (currpopularOrder === 1) {
+      filteritems.sort((movieC, movieD) => {
+        return movieC.vote_average - movieD.vote_average;
+      });
+    } else if (currpopularOrder === -1) {
+      filteritems.sort((movieC, movieD) => {
+        return movieD.vote_average - movieC.vote_average;
+      });
+    }
+  }
+
+  //pagination
+
+  const si = noofElem * Number(currpage - 1);
+  const ei = Number(noofElem) + Number(si);
+  const maxPageNum = Math.ceil(filteritems.length / noofElem);
+  const paginationitem = filteritems.slice(si, ei);
+
+  // changing page no in pagination
+
+  const onprev = (pageNum) => {
+    if (pageNum > 0) {
+      setcurrpage(pageNum);
+    }
+  };
+
+  // on next
+  const onNext = (pageNum) => {
+    if (pageNum <= maxPageNum) {
+      setcurrpage(pageNum);
+    }
+  };
   return (
     <>
       {/* genres */}
       <div className="mt-6 flex justify-center space-x-2 ">
         {genre.map((genre) => {
           return (
-            <button className="py-1 px-2 bg-gray-400 rounded-lg font-bold text-lg text-white hover:bg-blue-400">
-              {" "}
+            <button
+              className={
+                genre === currentGen
+                  ? `py-1 px-2rounded-lg font-bold text-lg text-white bg-blue-400`
+                  : `py-1 px-2 bg-gray-400 rounded-lg font-bold text-lg text-white hover:bg-blue-400`
+              }
+              onClick={() => {
+                oncurrentGen(genre);
+              }}
+            >
               {genre}
             </button>
           );
@@ -154,7 +229,14 @@ const Favourites = () => {
           value={search}
           onChange={(e) => setsearch(e.target.value)}
         />
-        <input type="number" className="border-2 py-1 px-2 text-center" />
+        <input
+          type="number"
+          className="border-2 py-1 px-2 text-center"
+          value={noofElem}
+          onChange={(e) => {
+            setnoofElem(e.target.value);
+          }}
+        />
       </div>
 
       {/* table */}
@@ -169,12 +251,18 @@ const Favourites = () => {
                 <div className="flex">
                   <img
                     src="https://img.icons8.com/external-those-icons-lineal-those-icons/24/000000/external-up-arrows-those-icons-lineal-those-icons-3.png"
+                    onClick={() => {
+                      setcurrRatingOrder(1);
+                    }}
                     className="mr-2 cursor-pointer"
                     alt=""
                   />
                   <div>Rating</div>
                   <img
                     src="https://img.icons8.com/external-those-icons-lineal-those-icons/24/000000/external-down-arrows-those-icons-lineal-those-icons-4.png"
+                    onClick={() => {
+                      setcurrRatingOrder(-1);
+                    }}
                     className="ml-2 mr-2 cursor-pointer"
                     alt=""
                   />
@@ -184,12 +272,18 @@ const Favourites = () => {
                 <div className="flex">
                   <img
                     src="https://img.icons8.com/external-those-icons-lineal-those-icons/24/000000/external-up-arrows-those-icons-lineal-those-icons-3.png"
+                    onClick={() => {
+                      setcurrpopularOrder(1);
+                    }}
                     className="mr-2 cursor-pointer "
                     alt=""
                   />
                   <div>Popularity</div>
                   <img
                     src="https://img.icons8.com/external-those-icons-lineal-those-icons/24/000000/external-down-arrows-those-icons-lineal-those-icons-4.png"
+                    onClick={() => {
+                      setcurrpopularOrder(-1);
+                    }}
                     className="ml-2 mr-2 cursor-pointer"
                     alt=""
                   />
@@ -204,7 +298,7 @@ const Favourites = () => {
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-100 border-t border-gray-100">
-            {searchedItem.map((movie) => {
+            {paginationitem.map((movie) => {
               return (
                 <tr className="hover:bg-gray-50" key={movie.id}>
                   <th className="flex gap-3 px-6 py-4 font-normal text-gray-900">
@@ -251,7 +345,7 @@ const Favourites = () => {
       </div>
 
       {/* pagination */}
-      <Pagination />
+      <Pagination onNext={onNext} onprev={onprev} pageNum={currpage} />
     </>
   );
 };
