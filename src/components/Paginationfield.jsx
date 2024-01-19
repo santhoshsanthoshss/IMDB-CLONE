@@ -1,11 +1,13 @@
 import React from "react";
 
-const Pagination = ({ pageNum, prev, nex, setpageNum }) => {
+const Paginationfield = ({ pageNum, onNext, prev, nex, onprev }) => {
   return (
     <div className="flex  justify-center mt-16">
       <div
         className="border-2 p-2 cursor-pointer rounded-l-xl border-blue-400"
-        onClick={prev}
+        onClick={() => {
+          onprev(pageNum - 1);
+        }}
       >
         Prev
       </div>
@@ -14,7 +16,9 @@ const Pagination = ({ pageNum, prev, nex, setpageNum }) => {
       </div>
       <div
         className="border-2 p-2 cursor-pointer rounded-r-xl border-blue-400"
-        onClick={nex}
+        onClick={() => {
+          onNext(pageNum + 1);
+        }}
       >
         Next
       </div>
@@ -22,4 +26,4 @@ const Pagination = ({ pageNum, prev, nex, setpageNum }) => {
   );
 };
 
-export default Pagination;
+export default Paginationfield;

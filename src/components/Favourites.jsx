@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Pagination from "./Pagination";
+import Paginationfield from "./Paginationfield";
 
 // movie
 let samplemovies = [
@@ -206,8 +207,8 @@ const Favourites = () => {
             <button
               className={
                 genre === currentGen
-                  ? `py-1 px-2rounded-lg font-bold text-lg text-white bg-blue-400`
-                  : `py-1 px-2 bg-gray-400 rounded-lg font-bold text-lg text-white hover:bg-blue-400`
+                  ? `py-1 px-1 px-2rounded-lg font-bold text-[20px] md:text-2xl border-none text-white bg-blue-400 scroll-m-2`
+                  : `py-1 px-1 bg-gray-400 rounded-lg font-bold text-[10px] border-none md:text-2xl text-white hover:bg-blue-400`
               }
               onClick={() => {
                 oncurrentGen(genre);
@@ -221,30 +222,32 @@ const Favourites = () => {
 
       {/* searching */}
 
-      <div className="mt-6 flex justify-center space-x-2 ">
+      <div className="mt-6 flex flex-wrap   justify-center space-x-2 ">
         <input
           type="text"
           placeholder="Search"
-          className="border-2 py-1 px-2 text-center"
+          className="border-2 py-1 px-1   text-center "
           value={search}
           onChange={(e) => setsearch(e.target.value)}
         />
-        <input
-          type="number"
-          className="border-2 py-1 px-2 text-center"
-          value={noofElem}
-          onChange={(e) => {
-            setnoofElem(e.target.value);
-          }}
-        />
+        <div className="relative top-2 sm:top-0 md:top-0">
+          <input
+            type="number"
+            className="border-2 py-1 px-1 text-center"
+            value={noofElem}
+            onChange={(e) => {
+              setnoofElem(e.target.value);
+            }}
+          />
+        </div>
       </div>
 
       {/* table */}
-      <div className="overflow-hidden rounded-lg border border-gray-200 shadow-md m-5">
-        <table className="w-full border-collapse bg-white text-left text-sm text-gray-500">
+      <div className="overflow-x-auto rounded-lg border border-gray-200 shadow-md m-5">
+        <table className="w-full min-w-max border-collapse bg-white text-left text-sm text-gray-500">
           <thead className="bg-gray-50">
             <tr>
-              <th scope="col" className="px-6 py-4 font-medium text-gray-900">
+              <th scope="col" className="px-6 py-4 font-medium text-gray-900 ">
                 Name
               </th>
               <th scope="col" className="px-6 py-4 font-medium text-gray-900">
@@ -303,7 +306,7 @@ const Favourites = () => {
                 <tr className="hover:bg-gray-50" key={movie.id}>
                   <th className="flex gap-3 px-6 py-4 font-normal text-gray-900">
                     <img
-                      className="h-[6rem] w-[10rem] rounded-xl"
+                      className="h-[6rem] w-[8rem] rounded-xl"
                       src={`https://image.tmdb.org/t/p/original/t/p/original/${movie.poster_path}`}
                       alt=""
                     />
@@ -345,7 +348,8 @@ const Favourites = () => {
       </div>
 
       {/* pagination */}
-      <Pagination onNext={onNext} onprev={onprev} pageNum={currpage} />
+
+      <Paginationfield onNext={onNext} onprev={onprev} pageNum={currpage} />
     </>
   );
 };
